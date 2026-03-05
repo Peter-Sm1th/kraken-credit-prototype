@@ -34,8 +34,8 @@ const POPULAR_ASSETS = [
 
 function formatPrice(value) {
   if (value == null || Number.isNaN(value)) return '—';
-  if (value >= 1) return `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-  return `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 })}`;
+  if (value >= 1) return `$${value.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
+  return `$${value.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 4 })}`;
 }
 
 function CoinLogo({ coinId, coinsById, fallbackLetter, className = '' }) {
@@ -698,7 +698,7 @@ function Portfolio() {
               <h1 className="buy-coin-screen-title">Buy {selectedCoin.ticker}</h1>
             </div>
             <button type="button" className="buy-coin-screen-instant" aria-label="Transaction type">
-              Instant <span className="buy-coin-screen-chevron">▼</span>
+              Instant <span className="buy-coin-screen-chevron" aria-hidden><DownChevronIcon /></span>
             </button>
           </header>
 
@@ -745,7 +745,7 @@ function Portfolio() {
                 </p>
               </div>
 
-              <button type="button" className="buy-coin-screen-frequency">One time <span aria-hidden>▼</span></button>
+              <button type="button" className="buy-coin-screen-frequency">One time <span className="buy-coin-screen-chevron" aria-hidden><DownChevronIcon /></span></button>
             </div>
 
             <div className="buy-coin-screen-funding" onClick={openPayWith}>
@@ -784,9 +784,9 @@ function Portfolio() {
                 <div className="buy-coin-screen-funding-text">
                   {selectedPayMethod.id === 'cash+credit' ? (
                     <>
-                      <span className="buy-coin-screen-funding-label">Cash + Credit · {formatPrice(buyAmountNum)} total</span>
-                      <span className="buy-coin-screen-funding-meta">
-                        $2,000 from your balance · {formatPrice(Math.max(0, buyAmountNum - CASH_BALANCE))} from credit line
+                      <span className="buy-coin-screen-funding-label">Cash + Credit</span>
+                      <span className="buy-coin-screen-funding-amount">
+                        {formatPrice(CASH_BALANCE)} cash · {formatPrice(Math.max(0, buyAmountNum - CASH_BALANCE))} credit
                       </span>
                     </>
                   ) : (
@@ -797,18 +797,7 @@ function Portfolio() {
                   )}
                 </div>
                 <span className="buy-coin-screen-funding-chevron" aria-hidden>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="11"
-                    height="7"
-                    viewBox="0 0 11 7"
-                    fill="none"
-                  >
-                    <path
-                      d="M10.2458 0.290792C10.0584 0.104542 9.80498 0 9.5408 0C9.27661 0 9.02316 0.104542 8.8358 0.290792L5.2458 3.83079L1.7058 0.290792C1.51844 0.104542 1.26498 0 1.0008 0C0.736612 0 0.483161 0.104542 0.295798 0.290792C0.20207 0.383755 0.127675 0.494356 0.0769067 0.616216C0.026138 0.738075 0 0.868781 0 1.00079C0 1.1328 0.026138 1.26351 0.0769067 1.38537C0.127675 1.50723 0.20207 1.61783 0.295798 1.71079L4.5358 5.95079C4.62876 6.04452 4.73936 6.11891 4.86122 6.16968C4.98308 6.22045 5.11379 6.24659 5.2458 6.24659C5.37781 6.24659 5.50852 6.22045 5.63037 6.16968C5.75223 6.11891 5.86283 6.04452 5.9558 5.95079L10.2458 1.71079C10.3395 1.61783 10.4139 1.50723 10.4647 1.38537C10.5155 1.26351 10.5416 1.1328 10.5416 1.00079C10.5416 0.868781 10.5155 0.738075 10.4647 0.616216C10.4139 0.494356 10.3395 0.383755 10.2458 0.290792Z"
-                      fill="white"
-                    />
-                  </svg>
+                  <DownChevronIcon />
                 </span>
               </div>
               <button
@@ -1562,6 +1551,17 @@ function ChevronIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <polyline points="9 18 15 12 9 6" />
+    </svg>
+  );
+}
+
+function DownChevronIcon() {
+  return (
+    <svg width="11" height="7" viewBox="0 0 11 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M10.2458 0.290792C10.0584 0.104542 9.80498 0 9.5408 0C9.27661 0 9.02316 0.104542 8.8358 0.290792L5.2458 3.83079L1.7058 0.290792C1.51844 0.104542 1.26498 0 1.0008 0C0.736612 0 0.483161 0.104542 0.295798 0.290792C0.20207 0.383755 0.127675 0.494356 0.0769067 0.616216C0.026138 0.738075 0 0.868781 0 1.00079C0 1.1328 0.026138 1.26351 0.0769067 1.38537C0.127675 1.50723 0.20207 1.61783 0.295798 1.71079L4.5358 5.95079C4.62876 6.04452 4.73936 6.11891 4.86122 6.16968C4.98308 6.22045 5.11379 6.24659 5.2458 6.24659C5.37781 6.24659 5.50852 6.22045 5.63037 6.16968C5.75223 6.11891 5.86283 6.04452 5.9558 5.95079L10.2458 1.71079C10.3395 1.61783 10.4139 1.50723 10.4647 1.38537C10.5155 1.26351 10.5416 1.1328 10.5416 1.00079C10.5416 0.868781 10.5155 0.738075 10.4647 0.616216C10.4139 0.494356 10.3395 0.383755 10.2458 0.290792Z"
+        fill="currentColor"
+      />
     </svg>
   );
 }

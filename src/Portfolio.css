@@ -877,8 +877,13 @@
 }
 
 .buy-coin-screen-chevron {
-  font-size: 10px;
+  display: inline-flex;
+  align-items: center;
   opacity: 0.8;
+}
+
+.buy-coin-screen-chevron svg {
+  flex-shrink: 0;
 }
 
 .buy-coin-screen-body {
@@ -1052,7 +1057,7 @@
 }
 
 .buy-coin-screen-funding-label {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   color: #9a97a8;
 }
@@ -1060,12 +1065,7 @@
 .buy-coin-screen-funding-amount {
   font-size: 15px;
   font-weight: 500;
-  color: #ffffff;
-}
-
-.buy-coin-screen-funding-meta {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgb(255, 255, 255);
 }
 
 .buy-coin-screen-funding-icon {
@@ -1073,7 +1073,8 @@
 }
 
 .buy-coin-screen-funding-chevron {
-  font-size: 10px;
+  display: inline-flex;
+  align-items: center;
   color: rgba(255, 255, 255, 0.5);
   margin-left: auto;
 }
@@ -1150,18 +1151,20 @@
 
 .buy-coin-screen-credit-prompt-link {
   margin-top: 2px;
-  padding: 0;
-  border: none;
-  background: none;
+  padding: 8px 14px;
+  border: 1.5px solid #8F50FF;
+  background: transparent;
   color: #8F50FF;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  text-align: left;
+  text-align: center;
+  border-radius: 999px;
+  align-self: flex-start;
 }
 
 .buy-coin-screen-credit-prompt-link:hover {
-  text-decoration: underline;
+  background: rgba(143, 80, 255, 0.1);
 }
 
 .buy-coin-screen-credit-info {
@@ -1794,9 +1797,6 @@
   font-size: 14px;
 }
 
-.confirm-row + .confirm-row {
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-}
 
 .confirm-row-label {
   display: inline-flex;
