@@ -121,6 +121,7 @@ function Portfolio() {
     amount: '$2,000',
     meta: 'Available',
   });
+  const [hasSeenCreditEducation, setHasSeenCreditEducation] = useState(false);
   const [creditDetailsSheetOpen, setCreditDetailsSheetOpen] = useState(false);
   const [creditSheetClosing, setCreditSheetClosing] = useState(false);
   const [confirmScreenOpen, setConfirmScreenOpen] = useState(false);
@@ -151,6 +152,14 @@ function Portfolio() {
       });
     return () => { cancelled = true; };
   }, []);
+
+  useEffect(() => {
+    if (buyCoinScreenOpen && amountInputRef.current) {
+      setTimeout(() => {
+        amountInputRef.current.focus();
+      }, 350);
+    }
+  }, [buyCoinScreenOpen]);
 
   const coinsById = Object.fromEntries((coins || []).map((c) => [c.id, c]));
   const btcPrice = coinsById.bitcoin?.current_price ?? FALLBACK_PRICES.btc;
@@ -301,6 +310,7 @@ function Portfolio() {
     setPayWithClosing(false);
     setCreditDetailsSheetOpen(false);
     setCreditSheetClosing(false);
+    setHasSeenCreditEducation(false);
     setSelectedCoin(null);
     setBuyAmount('0');
     setAckBorrow(false);
@@ -309,18 +319,16 @@ function Portfolio() {
   };
 
   const handleSelectPayMethod = (method) => {
-    console.log('Selected payment method:', method.id);
     setSelectedPayMethod(method);
     if (method.id === 'credit') {
-      console.log('Credit selected - closing pay with sheet');
       setPayWithClosing(true);
       setTimeout(() => {
-        console.log('Pay with closed - opening credit sheet');
         setPayWithSheetOpen(false);
         setPayWithClosing(false);
-        setCreditDetailsSheetOpen(true);
-        setCreditSheetClosing(false);
-        console.log('creditDetailsSheetOpen should now be true');
+        if (!hasSeenCreditEducation) {
+          setCreditDetailsSheetOpen(true);
+          setCreditSheetClosing(false);
+        }
       }, 750);
     } else {
       closePayWith();
@@ -394,10 +402,12 @@ function Portfolio() {
       creditAmount: buyAmountNum - CASH_BALANCE,
       total: buyAmountNum,
     });
-    setTimeout(() => {
-      setCreditDetailsSheetOpen(true);
-      setCreditSheetClosing(false);
-    }, 750);
+    if (!hasSeenCreditEducation) {
+      setTimeout(() => {
+        setCreditDetailsSheetOpen(true);
+        setCreditSheetClosing(false);
+      }, 750);
+    }
   };
 
   return (
@@ -1450,7 +1460,10 @@ function Portfolio() {
               <button
                 type="button"
                 className="credit-sheet-button credit-sheet-button--primary"
-                onClick={() => closeCreditSheet()}
+                onClick={() => {
+                  setHasSeenCreditEducation(true);
+                  closeCreditSheet();
+                }}
               >
                 Continue
               </button>
